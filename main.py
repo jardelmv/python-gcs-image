@@ -13,6 +13,10 @@ JSON_MIME_TYPE = 'application/json'
 
 app = Flask(__name__)
 
+@app.route('/image-s', methods=['GET'])
+def image_s():
+	return json_response(json.dumps({'image_s': 'running'}))
+
 @app.route('/image-url', methods=['GET'])
 def image_url():
 	bucket = request.args.get('bucket')
