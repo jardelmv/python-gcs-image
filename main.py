@@ -18,7 +18,7 @@ def image_s():
 	#return json_response(json.dumps({'image_s': 'running'}))
 	bucket = request.args.get('bucket')
 	image = request.args.get('image')
-	size = request.args.get('size')
+	#size = request.args.get('size')
 	
 	filepath = (bucket + "/" + image)
 	
@@ -31,9 +31,10 @@ def image_s():
 		error = json.dumps({'error': 'The object was not found.'})
 		return json_response(error, 404)
 	try:
-		resizedImage = json.loads(servingImage)['image_url']
-	except:
-		return 'error'
+		resizedImage = servingImage['image_url']
+	except Exception,e: 
+		return str(e)
+
 	return json_response(json.dumps({'image_s': resizedImage}))
 
 @app.route('/image-url', methods=['GET'])
