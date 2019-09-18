@@ -31,7 +31,7 @@ def image_s():
 		error = json.dumps({'error': 'The object was not found.'})
 		return json_response(error, 404)
 	try:
-		resizedImage = servingImage['image_url']
+		resizedImage = json.loads(servingImage)['image_url']
 	except:
 		return 'error'
 	return json_response(json.dumps({'image_s': resizedImage}))
