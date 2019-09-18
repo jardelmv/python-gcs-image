@@ -15,7 +15,26 @@ app = Flask(__name__)
 
 @app.route('/image-s', methods=['GET'])
 def image_s():
-	return json_response(json.dumps({'image_s': 'running'}))
+	#return json_response(json.dumps({'image_s': 'running'}))
+	bucket = request.args.get('bucket')
+	image = request.args.get('image')
+	size = request.args.get('size')
+	
+	filepath = (bucket + "/" + image)
+	
+	try:
+		servingImage = images.get_serving_url(None, filename='/gs/' + filepath)
+	except images.AccessDeniedError:
+		error = json.dumps({'error': 'Ensure the GAE service account has access to the object in Google Cloud Storage.'})
+		return json_response(error, 401)
+	except images.ObjectNotFoundError:
+		error = json.dumps({'error': 'The object was not found.'})
+		return json_response(error, 404)
+	try:
+		resizedImage = servingImage['image_url']
+	except:
+		return 'error'
+	return json_response(json.dumps({'image_s': resizedImage}))
 
 @app.route('/image-url', methods=['GET'])
 def image_url():
